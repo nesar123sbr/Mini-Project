@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/pioneer/Desktop/minipro/aflix/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-it/values-it.xml",
+            "outputFile": "/home/pioneer/Desktop/minipro/aflix/aflix/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-it/values-it.xml",
             "map": [
                 {
                     "source": "/home/pioneer/.gradle/caches/transforms-2/files-2.1/639e914bfc1efa21e36199d3ff2c5eef/core-1.1.0/res/values-it/values-it.xml",

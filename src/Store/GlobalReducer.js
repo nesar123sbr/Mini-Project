@@ -1,22 +1,14 @@
-import {Value} from 'react-native-reanimated';
-
 const initialState = {
-  theme: false,
+  theme: 'dark',
   language: 'indonesia',
 };
 
-const GlobalReducer = (state = initialState, action) => {
+export const GlobalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CHANGE_THEME:
+    case 'CHANGE_LANGUAGE':
       return {
         ...state,
-        theme: !state.theme,
-      };
-
-    case CHANGE_LANGUAGE:
-      return {
-        ...state,
-        language: action.payload,
+        language: 'japanese',
       };
 
     default:

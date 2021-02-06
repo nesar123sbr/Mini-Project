@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, Image, Modal} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  Image,
+  Modal,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 
 import {Rating, AirbnbRating} from 'react-native-elements';
 import {UserRevStyle} from './style';
@@ -13,6 +20,9 @@ import {moderateScale} from 'react-native-size-matters';
 
 export default function UserReview(props) {
   const [editReview, setEditReview] = useState(false);
+  const [headline, setHeadline] = React.useState('Headline');
+  const [explanation, setExplanation] = React.useState('Explanation');
+
   return (
     <>
       <View>
@@ -29,7 +39,6 @@ export default function UserReview(props) {
               </View>
               <Text style={{paddingLeft: 10}}>Reviewer: takahiro.moriuchi</Text>
               <Text style={{paddingLeft: 10}}>Reviewed February 1st 2021</Text>
-              <Text style={{paddingLeft: 10}}>9/10</Text>
               <View style={{flexDirection: 'row'}}>
                 <MaterialCommunityIcons
                   size={moderateScale(20)}
@@ -73,20 +82,48 @@ export default function UserReview(props) {
               fractions={1}
               startingValue={0}
               type="custom"
-              ratingColor="#3498db"
+              ratingColor="yellow"
               ratingBackgroundColor="#c8c7c8"
               ratingCount={10}
               imageSize={20}
               style={{paddingVertical: 10}}
             />
-            <Text> Headline</Text>
-            <Text>Explanations</Text>
-            <AntDesign
-              size={moderateScale(20)}
-              name="closecircleo"
-              color="black"
-              onPress={() => setEditReview(false)}
+            <TextInput
+              style={{
+                height: 40,
+                width: 250,
+                borderColor: 'gray',
+                borderWidth: 1,
+                backgroundColor: 'white',
+              }}
+              onChangeText={(text) => setHeadline(text)}
+              value={headline}
             />
+
+            <TextInput
+              multiline
+              numberOfLines={5}
+              style={{
+                height: 150,
+                width: 250,
+                borderColor: 'gray',
+                borderWidth: 1,
+                backgroundColor: 'white',
+                marginTop: 10,
+                textAlignVertical: 'top',
+              }}
+              onChangeText={(text) => setExplanation(text)}
+              value={explanation}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                console.log('test');
+                setEditReview(false);
+              }}
+              style={{backgroundColor: 'white', padding: 5, marginTop: 10}}>
+              <Text>Submit</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

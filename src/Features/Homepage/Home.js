@@ -1,8 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 //components
-import {View, Text, ImageBackground, Image, Modal} from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  Image,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import {SearchBar, Rating} from 'react-native-elements';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Homestyle} from './style';
 import {
   CollapseBody,
@@ -18,78 +27,111 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {moderateScale} from 'react-native-size-matters';
 //pages
 import Reviews from '../Allreview/Reviews';
+import axios from 'axios';
+import * as Source from '../../Utils/sourceURL';
+import {connect} from 'react-redux';
+import {fetchGenres} from './Redux/Action';
 
-export default function Home(props, navigation) {
+function Home(props) {
   const [addReview, setAddReview] = useState(false);
+  const [fetchGenres, setFetchGenres] = useState([]);
+  const [showMovies, setShowMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
 
+  const actionGetGenres = () => {
+    props.fetchGenres();
+  };
+
+  const getGenres = async () => {
+    try {
+      const respond = await axios.get(
+        Source.movdb + Source.genres + Source.mykey,
+      );
+      console.log(respond);
+      if (respond) {
+        let allMov = {name: 'All Movies', id: 999};
+        let newGenre = respond.data.genres;
+        newGenre.unshift(allMov);
+
+        setFetchGenres(newGenre);
+        console.log(respond);
+      } else {
+        console.log('Failed to load');
+      }
+    } catch (err) {
+      console.log('Failed to get the api');
+    }
+  };
+  console.log(fetchGenres);
+
+  useEffect(() => {
+    getGenres();
+    axios.get(Source.movdb + Source.popMov + Source.mykey).then((e) => {
+      console.log(e.data.results);
+      setMovies(e.data.results);
+    });
+  }, []);
+
+  console.log(props, 'props punya home');
   return (
     <>
       <ScrollView style={Homestyle.container}>
         <View style={{borderRadius: 20, backgroundColor: 'red'}}>
           <SearchBar>Search Movies</SearchBar>
         </View>
+
+        <TouchableOpacity onPress={actionGetGenres}>
+          <Text style={{color: 'white'}}>test saga</Text>
+        </TouchableOpacity>
         <Text style={Homestyle.headers}>Best Genre</Text>
-        <ScrollView horizontal>
-          <TouchableOpacity style={Homestyle.genre}>
-            <View style={Homestyle.genreButton}>
-              <Entypo
-                size={moderateScale(12)}
-                name="database"
-                color="black"
-                style={{
-                  elevation: 10,
-                  shadowRadius: 50,
+
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          keyExtractor={(item) => item.id.toString()}
+          data={fetchGenres}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                onPress={async () => {
+                  if (item.id === 999) {
+                    axios
+                      .get(Source.movdb + Source.popMov + Source.mykey)
+                      .then((e) => {
+                        console.log(e.data.results);
+                        setMovies(e.data.results);
+                      });
+                  } else {
+                    let result = await axios.get(
+                      Source.movdb +
+                        Source.getMovByCat +
+                        Source.mykey +
+                        `&with_genres=${item.id}`,
+                    );
+                    setMovies(result.data.results);
+                  }
                 }}
-              />
-              <Text>Action</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={Homestyle.genre}>
-            <View style={Homestyle.genreButton}>
-              <Entypo
-                size={moderateScale(12)}
-                name="database"
-                color="black"
                 style={{
-                  elevation: 10,
-                  shadowRadius: 50,
-                }}
-              />
-              <Text>Romance</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={Homestyle.genre}>
-            <View style={Homestyle.genreButton}>
-              <Entypo
-                size={moderateScale(12)}
-                name="database"
-                color="black"
-                style={{
-                  elevation: 10,
-                  shadowRadius: 50,
-                }}
-              />
-              <Text>Thriller</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={Homestyle.genre}>
-            <View style={Homestyle.genreButton}>
-              <Entypo
-                size={moderateScale(12)}
-                name="database"
-                color="black"
-                style={{
-                  elevation: 10,
-                  shadowRadius: 50,
-                }}
-              />
-              <Text>Comedy</Text>
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
+                  padding: 5,
+                  backgroundColor: 'white',
+                  marginLeft: 5,
+                  borderRadius: 5,
+                }}>
+                <Text style={{color: 'black'}}>{item.name}</Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
+
         <Text style={Homestyle.headers}>Hot Thriller Movies</Text>
 
-        <View style={Homestyle.card}>
+        <FlatList
+          data={movies}
+          renderItem={({item}) => {
+            return <Text style={{color: 'white'}}>{item.title}</Text>;
+          }}
+        />
+        {/* <View style={Homestyle.card}>
           <View>
             <ImageBackground
               style={Homestyle.poster}
@@ -139,6 +181,7 @@ export default function Home(props, navigation) {
                         color="black"
                         onPress={() => setAddReview(true)}
                       />
+
                       <Text>Rate this</Text>
                     </View>
                   </View>
@@ -176,35 +219,75 @@ export default function Home(props, navigation) {
               }}
             />
           </View>
-        </View>
+        </View> */}
       </ScrollView>
 
       <Modal visible={addReview} transparent={true}>
         <View style={{backgroundColor: 'black', flex: 1, opacity: 0.88}}>
           <View style={Homestyle.reviewModal}>
-            <Text>How do you think about this movie?</Text>
+            <Text style={{fontSize: 15}}>
+              How do you think about this movie?
+            </Text>
             <Rating
               showRating
               fractions={1}
               startingValue={0}
               type="custom"
-              ratingColor="#3498db"
+              ratingColor="yellow"
               ratingBackgroundColor="#c8c7c8"
               ratingCount={10}
               imageSize={20}
               style={{paddingVertical: 10}}
             />
-            <Text> Headline</Text>
-            <Text>Explanations</Text>
-            <AntDesign
-              size={moderateScale(20)}
-              name="closecircleo"
-              color="black"
-              onPress={() => setAddReview(false)}
+            <TextInput
+              style={{
+                height: 40,
+                width: 250,
+                borderColor: 'gray',
+                borderWidth: 1,
+                backgroundColor: 'white',
+              }}
+              placeholderTextColor="blue"
+              placeholder="hoho"
             />
+
+            <TextInput
+              multiline
+              numberOfLines={5}
+              style={{
+                height: 150,
+                width: 250,
+                borderColor: 'gray',
+                borderWidth: 1,
+                backgroundColor: 'white',
+                marginTop: 10,
+                textAlignVertical: 'top',
+              }}
+              placeholderTextColor="red"
+              placeholder="hehe"
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                console.log('test');
+                setAddReview(false);
+              }}
+              style={{backgroundColor: 'white', padding: 5, marginTop: 10}}>
+              <Text>Submit</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
     </>
   );
 }
+
+//untuk get data ke store
+const mapStateToProps = (state) => {};
+
+//untuk dispatch redux
+const mapDispatchToProps = {
+  fetchGenres,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

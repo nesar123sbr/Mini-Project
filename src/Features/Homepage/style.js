@@ -47,7 +47,7 @@ export const Homestyle = StyleSheet.create({
   reviewModal: {
     height: 400,
     width: 320,
-    backgroundColor: 'orange',
+    backgroundColor: '#dbd6bf',
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',

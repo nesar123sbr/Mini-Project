@@ -1,10 +1,8 @@
 import {combineReducers} from 'redux';
 import {GlobalReducer} from './GlobalReducer';
-import {LoginReducer} from '../Features/Login/reducer';
-import {HomeReducer} from '../Features/Homepage/reducer';
+import {HomeReducer} from '../Features/Homepage/Redux/Reducer';
 
-export const AllReducer = combineReducers({
+export const allReducer = combineReducers({
   GlobalReducer,
-  LoginReducer,
   HomeReducer,
 });

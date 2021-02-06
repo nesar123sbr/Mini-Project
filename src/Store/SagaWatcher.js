@@ -1,7 +1,6 @@
 import {all} from 'redux-saga/effects';
-import {LoginSaga} from '../Features/Login/LoginSaga';
-import {HomeSaga} from '../Features/Homepage/HomeSaga';
+import {HomeSaga} from '../Features/Homepage/Redux/Saga';
 
 export function* SagaWatcher() {
-  yield all(LoginSaga, HomeSaga);
+  yield all([HomeSaga()]);
 }
