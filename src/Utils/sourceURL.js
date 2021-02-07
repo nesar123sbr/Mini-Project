@@ -5,5 +5,6 @@ export const topRated = '/movie/top_rated';
 export const popMov = '/movie/popular';
 export const genres = '/genre/movie/list';
 export const getMovByCat = '/discover/movie';
+export const getPoster = '/movie/{movie_id}/images';
 
 export const detailMov = (id) => `/movie/${id}`;

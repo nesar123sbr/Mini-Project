@@ -13,63 +13,59 @@ import {
 } from 'react-native';
 import {SearchBar, Rating} from 'react-native-elements';
 import {Homestyle} from './style';
-import {
-  CollapseBody,
-  CollapseHeader,
-  Collapse,
-} from 'accordion-collapse-react-native';
+import FastImage from 'react-native-fast-image';
 
-//icons
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-//style
-import {moderateScale} from 'react-native-size-matters';
 //pages
 import Reviews from '../Allreview/Reviews';
 import axios from 'axios';
 import * as Source from '../../Utils/sourceURL';
 import {connect} from 'react-redux';
-import {fetchGenres} from './Redux/Action';
+import {fetchGenres, listMovies} from './Redux/Action';
+import {MovieDetails} from './MovieDetails';
 
 function Home(props) {
-  const [addReview, setAddReview] = useState(false);
   const [fetchGenres, setFetchGenres] = useState([]);
-  const [showMovies, setShowMovies] = useState([]);
   const [movies, setMovies] = useState([]);
 
   const actionGetGenres = () => {
     props.fetchGenres();
   };
 
-  const getGenres = async () => {
-    try {
-      const respond = await axios.get(
-        Source.movdb + Source.genres + Source.mykey,
-      );
-      console.log(respond);
-      if (respond) {
-        let allMov = {name: 'All Movies', id: 999};
-        let newGenre = respond.data.genres;
-        newGenre.unshift(allMov);
+  // const getGenres = async () => {
+  //   try {
+  //     const respond = await axios.get(
+  //       Source.movdb + Source.genres + Source.mykey,
+  //     );
+  //     console.log(respond);
+  //     if (respond) {
+  //       let allMov = {name: 'All Movies', id: 999};
+  //       let newGenre = respond.data.genres;
+  //       newGenre.unshift(allMov);
 
-        setFetchGenres(newGenre);
-        console.log(respond);
-      } else {
-        console.log('Failed to load');
-      }
-    } catch (err) {
-      console.log('Failed to get the api');
-    }
-  };
-  console.log(fetchGenres);
+  //       setFetchGenres(newGenre);
+  //       console.log(respond);
+  //     } else {
+  //       console.log('Failed to load');
+  //     }
+  //   } catch (err) {
+  //     console.log('Failed to get the api');
+  //   }
+  // };
+  // console.log(fetchGenres);
+
+  // useEffect(() => {
+  //   getGenres();
+  //   axios.get(Source.movdb + Source.popMov + Source.mykey).then((e) => {
+  //     console.log(e.data.results);
+  //     setMovies(e.data.results);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    getGenres();
-    axios.get(Source.movdb + Source.popMov + Source.mykey).then((e) => {
-      console.log(e.data.results);
-      setMovies(e.data.results);
-    });
+    props.fetchGenres('Genres');
+    props.listMovies('Movies');
+    console.log(props.listGenres);
+    console.log(props.listMovies);
   }, []);
 
   console.log(props, 'props punya home');
@@ -80,10 +76,51 @@ function Home(props) {
           <SearchBar>Search Movies</SearchBar>
         </View>
 
-        <TouchableOpacity onPress={actionGetGenres}>
-          <Text style={{color: 'white'}}>test saga</Text>
-        </TouchableOpacity>
         <Text style={Homestyle.headers}>Best Genre</Text>
+
+        <FlatList
+          data={props.listGenres}
+          horizontal
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity>
+                <Text
+                  style={{
+                    color: 'black',
+                    padding: 5,
+                    backgroundColor: 'white',
+                    marginLeft: 5,
+                    borderRadius: 5,
+                    marginBottom: 10,
+                  }}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
+
+        <FlatList
+          data={props.movies}
+          renderItem={({item}) => {
+            return (
+              <View style={Homestyle.card}>
+                <FastImage
+                  source={{
+                    uri: item.image_thumbnail,
+                  }}
+                  style={Homestyle.poster}
+                />
+                <Text>{item.title}</Text>
+                <MovieDetails
+                  overview={item.overview}
+                  average={item.average_rating}
+                  total={item.total_reviews}
+                />
+              </View>
+            );
+          }}
+        />
 
         <FlatList
           showsHorizontalScrollIndicator={false}
@@ -123,8 +160,6 @@ function Home(props) {
           }}
         />
 
-        <Text style={Homestyle.headers}>Hot Thriller Movies</Text>
-
         <FlatList
           data={movies}
           renderItem={({item}) => {
@@ -147,54 +182,6 @@ function Home(props) {
               />
             </ImageBackground>
           </View>
-
-          <Collapse style={{width: 250}}>
-            <CollapseHeader>
-              <View>
-                <Text>Details</Text>
-              </View>
-            </CollapseHeader>
-            <CollapseBody>
-              <View style={{flexDirection: 'row'}}>
-                <Text>Parasite</Text>
-                <Text>2019 | Thriller</Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <Image
-                  style={{width: 80, height: 120}}
-                  source={require('../../Assets/Images/cat.jpg')}
-                />
-                <View>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={{paddingLeft: 10}}>
-                      <Entypo
-                        size={moderateScale(20)}
-                        name="star-outlined"
-                        color="black"
-                      />
-                      <Text>9/10</Text>
-                    </View>
-                    <View style={{paddingLeft: 10}}>
-                      <Entypo
-                        size={moderateScale(20)}
-                        name="star-outlined"
-                        color="black"
-                        onPress={() => setAddReview(true)}
-                      />
-
-                      <Text>Rate this</Text>
-                    </View>
-                  </View>
-                  <Text>
-                    A poor family, the Kims, con their way into becoming the
-                    servants of a rich family, the Parks. But their easy life
-                    gets complicated when their deception is threatened with
-                    exposure.
-                  </Text>
-                </View>
-              </View>
-            </CollapseBody>
-          </Collapse>
 
           <View style={Homestyle.lowSect}>
             <View style={{flexDirection: 'row'}}>
@@ -221,73 +208,20 @@ function Home(props) {
           </View>
         </View> */}
       </ScrollView>
-
-      <Modal visible={addReview} transparent={true}>
-        <View style={{backgroundColor: 'black', flex: 1, opacity: 0.88}}>
-          <View style={Homestyle.reviewModal}>
-            <Text style={{fontSize: 15}}>
-              How do you think about this movie?
-            </Text>
-            <Rating
-              showRating
-              fractions={1}
-              startingValue={0}
-              type="custom"
-              ratingColor="yellow"
-              ratingBackgroundColor="#c8c7c8"
-              ratingCount={10}
-              imageSize={20}
-              style={{paddingVertical: 10}}
-            />
-            <TextInput
-              style={{
-                height: 40,
-                width: 250,
-                borderColor: 'gray',
-                borderWidth: 1,
-                backgroundColor: 'white',
-              }}
-              placeholderTextColor="blue"
-              placeholder="hoho"
-            />
-
-            <TextInput
-              multiline
-              numberOfLines={5}
-              style={{
-                height: 150,
-                width: 250,
-                borderColor: 'gray',
-                borderWidth: 1,
-                backgroundColor: 'white',
-                marginTop: 10,
-                textAlignVertical: 'top',
-              }}
-              placeholderTextColor="red"
-              placeholder="hehe"
-            />
-
-            <TouchableOpacity
-              onPress={() => {
-                console.log('test');
-                setAddReview(false);
-              }}
-              style={{backgroundColor: 'white', padding: 5, marginTop: 10}}>
-              <Text>Submit</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </>
   );
 }
 
 //untuk get data ke store
-const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => ({
+  listGenres: state.HomeReducer.genres,
+  movies: state.HomeReducer.movies,
+});
 
-//untuk dispatch redux
+//untuk dispatch reduxm kumpulan action
 const mapDispatchToProps = {
   fetchGenres,
+  listMovies,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

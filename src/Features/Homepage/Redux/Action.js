@@ -1,6 +1,11 @@
 export const fetchGenres = () => {
   return {
-    type: 'GET_GENRES',
-    data: 'isi',
+    type: 'FETCH_GENRES',
+  };
+};
+
+export const listMovies = () => {
+  return {
+    type: 'FETCH_MOVIES',
   };
 };

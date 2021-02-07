@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-native-resposive-screen
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-native-fast-images
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/pioneer/Android/Sdk/emulator:/home/pioneer/Android/Sdk/tools:/home/pioneer/Android/Sdk/tools/bin:/home/pioneer/Android/Sdk/platform-tools
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/react-native-resposive-screen: Not found
+  Error: https://registry.yarnpkg.com/react-native-fast-images: Not found
       at Request.params.callback [as _callback] (/usr/share/yarn/lib/cli.js:66988:18)
       at Request.self.callback (/usr/share/yarn/lib/cli.js:140749:22)
       at Request.emit (events.js:198:13)
@@ -57,6 +57,7 @@ npm manifest:
       "react-native-gesture-handler": "^1.9.0",
       "react-native-modal": "^11.6.1",
       "react-native-ratings": "^7.3.0",
+      "react-native-responsive-screen": "^1.4.2",
       "react-native-safe-area-context": "^3.1.9",
       "react-native-screens": "^2.17.1",
       "react-native-size-matters": "^0.4.0",
@@ -66,6 +67,7 @@ npm manifest:
       "redux-logger": "^3.0.6",
       "redux-persist": "^6.0.0",
       "redux-saga": "^1.1.3",
+      "redux-thunk": "^2.3.0",
       "yarn": "^1.22.10"
     },
     "devDependencies": {
@@ -6032,6 +6034,11 @@ Lockfile:
       lodash "^4.17.15"
       prop-types "^15.7.2"
   
+  react-native-responsive-screen@^1.4.2:
+    version "1.4.2"
+    resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.2.tgz#45280826d24f9accbfdf46a36cb8e6d780f76f28"
+    integrity sha512-BLYz0UUpeohrib7jbz6wDmtBD5OmiuMRko4IT8kIF63taXPod/c5iZgmWnr5qOnK8hMuKiGMvsM3sC+eHX/lEQ==
+  
   react-native-safe-area-context@^3.1.9:
     version "3.1.9"
     resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.9.tgz#48864ea976b0fa57142a2cc523e1fd3314e7247e"
@@ -6197,6 +6204,11 @@ Lockfile:
     integrity sha512-RkSn/z0mwaSa5/xH/hQLo8gNf4tlvT18qXDNvedihLcfzh+jMchDgaariQoehCpgRltEm4zHKJyINEz6aqswTw==
     dependencies:
       "@redux-saga/core" "^1.1.3"
+  
+  redux-thunk@^2.3.0:
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+    integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
   
   redux@^4.0.4, redux@^4.0.5:
     version "4.0.5"

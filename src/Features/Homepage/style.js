@@ -36,6 +36,7 @@ export const Homestyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    marginBottom: 20,
   },
   line: {
     borderWidth: 200,
@@ -52,5 +53,6 @@ export const Homestyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     opacity: 1,
+    alignSelf: 'center',
   },
 });

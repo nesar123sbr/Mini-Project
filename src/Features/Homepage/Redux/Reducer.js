@@ -1,5 +1,6 @@
 const initialState = {
   genres: [],
+  movies: [],
 };
 
 export const HomeReducer = (state = initialState, action) => {
@@ -8,6 +9,12 @@ export const HomeReducer = (state = initialState, action) => {
       return {
         ...state,
         genres: action.payload,
+      };
+
+    case 'SET_MOVIES':
+      return {
+        ...state,
+        movies: action.payload,
       };
 
     default:

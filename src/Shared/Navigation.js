@@ -10,23 +10,32 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
+import Register from '../Features/Register/Register';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export function myReviewStack(props) {
+export function AuthNav(props) {
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="User Review" component={UserReview} />
-      <Stack.Screen name="Reviews" component={Reviews} />
+    <Stack.Navigator initialRouteName="Login" headerMode="none">
       <Stack.Screen name="Login" component={Login} />
-      {/* <Stack.Screen name="Register" component={Register} /> */}
+      <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
 }
 
-export default function Navigation(props) {
+export function myReviewStack() {
   return (
-    <Tab.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="User Review">
+      <Stack.Screen name="User Review" component={UserReview} />
+      <Stack.Screen name="Reviews" component={Reviews} />
+    </Stack.Navigator>
+  );
+}
+
+function bottomTab(props) {
+  return (
+    <Tab.Navigator initialRouteName="Home">
       <Tab.Screen
         name="UserReview"
         component={myReviewStack}
@@ -56,5 +65,14 @@ export default function Navigation(props) {
         }}
       />
     </Tab.Navigator>
+  );
+}
+
+export default function Navigation() {
+  return (
+    <Stack.Navigator initialRouteName="Auth" headerMode="none">
+      <Stack.Screen name="Main" component={bottomTab} />
+      <Stack.Screen name="Auth" component={AuthNav} />
+    </Stack.Navigator>
   );
 }
