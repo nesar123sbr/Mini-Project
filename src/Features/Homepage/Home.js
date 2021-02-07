@@ -1,22 +1,11 @@
 import React, {useState, useEffect} from 'react';
 //components
-import {
-  View,
-  Text,
-  ImageBackground,
-  Image,
-  Modal,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from 'react-native';
-import {SearchBar, Rating} from 'react-native-elements';
+import {View, Text, TouchableOpacity, ScrollView, FlatList} from 'react-native';
+import {SearchBar} from 'react-native-elements';
 import {Homestyle} from './style';
 import FastImage from 'react-native-fast-image';
 
 //pages
-import Reviews from '../Allreview/Reviews';
 import axios from 'axios';
 import * as Source from '../../Utils/sourceURL';
 import {connect} from 'react-redux';
@@ -78,7 +67,7 @@ function Home(props) {
 
         <Text style={Homestyle.headers}>Best Genre</Text>
 
-        <FlatList
+        {/* <FlatList
           data={props.listGenres}
           horizontal
           renderItem={({item}) => {
@@ -98,7 +87,7 @@ function Home(props) {
               </TouchableOpacity>
             );
           }}
-        />
+        /> */}
 
         <FlatList
           data={props.movies}

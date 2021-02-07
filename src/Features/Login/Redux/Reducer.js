@@ -1,6 +1,8 @@
 const initialState = {
   email: '',
   token: '',
+  name: '',
+  username: '',
 };
 
 export const loginReducer = (state = initialState, action) => {
@@ -10,6 +12,8 @@ export const loginReducer = (state = initialState, action) => {
         ...state,
         email: action.email,
         token: action.token,
+        name: action.name,
+        username: action.username,
       };
 
     default:
